@@ -27,8 +27,8 @@ export const createTest = (req: Request, res: Response): void => {
 
 export const getTests = (req: Request, res: Response): void => {
     conn.query('SELECT * FROM test', (err: string, rows: []): void => {
-        if (err) throw err;
         try {
+            if (err) throw err;
             res.status(201).json({success: true, data: rows});
         } catch (err) {
             res.status(500).json({success: false, message: "Internal Server Error: Get Tests"});
