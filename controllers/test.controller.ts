@@ -1,63 +1,139 @@
 import {Request, Response} from 'express';
-import dotenv from "dotenv";
-const mysql = require('mysql');
+const {db} = require('../utils/db.sql.ts'),
+    sql = require('../sql/test.sql.ts');
 
-dotenv.config();
+export const createTest = async (req: Request, res: Response) => {
+  try {
+    const { name, description } = req.body.payload,
+        actionType = 'create';
 
-const conn = mysql.createPool({
-  connectionLimit: process.env.CONNECTION_LIMIT,
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE
-});
-
-export const createTest = (req: Request, res: Response): void => {
-    const {name, description} = req.body;
-    
-    conn.query('INSERT INTO test (name, description) VALUES (?, ?)', [name, description], (err: string) => {
-        try {
-            if (err) throw err;
-            res.status(201).json({success: true, message:"Successfully inserted to table"});
-        } catch (err) {
-            res.status(500).json({success: false, message: "Internal Server Error: Create Test"});
+    await db.query(
+        sql.createTest(), 
+        {
+            actionType,
+            name,
+            description
         }
+    );
+
+    const [result] = await db.query(
+        sql.returnResponse()
+    );
+
+    res.json
+    ({ 
+        success: true, 
+        response: JSON.parse(result[0].response)
     });
+
+  } catch (err) {
+    if (err instanceof Error){
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    };
+    res.status(500).json({
+        success: false,
+        message: 'Failed to Create Test',
+    }); 
+  };
 };
 
-export const getTests = (req: Request, res: Response): void => {
-    conn.query('SELECT * FROM test', (err: string, rows: []): void => {
-        try {
-            if (err) throw err;
-            res.status(201).json({success: true, data: rows});
-        } catch (err) {
-            res.status(500).json({success: false, message: "Internal Server Error: Get Tests"});
-        }
-    });
-}
-
-export const updateTest = (req: Request, res: Response): void => {
-    const testId = req.params.id;
-    const {name, description} = req.body;
-
-    conn.query('UPDATE test set name = ?, description = ? WHERE id = ?', [name, description, testId], (err:string) => {
-        try {
-            if (err) throw err;
-            res.status(201).json({success: true, message: "Test updated successfully"});
-        } catch (err) {
-            res.status(500).json({success: false, message: "Internal Server Error: Edit Test"});
-        }
-    });
+export const getTests = async (req: Request, res: Response) => {
+    try {
+        const [rows] = await db.query(
+            sql.getTests()
+        )
+        res.status(201).json({
+            success: true, 
+            data: rows
+        });
+    } catch (err) {
+        if (err instanceof Error){
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            }); 
+        };
+        res.status(500).json({
+            success: false,
+            message: 'Failed to Get Tests',
+        }); 
+    }
 };
 
-export const deletetest = (req: Request, res: Response): void => {
-    const testId = req.params.id;
-    conn.query('DELETE FROM test WHERE id = ?', testId, (err:string) => {
-        try {
-            if (err) throw err;
-            res.status(201).json({success: true, message: "Test deleted succesfully"});
-        } catch (err) {
-            res.status(500).json({success: false, message: "Internal Server Error: Delete Test"});
-        }
-    });
+export const updateTest = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id,
+            {name, description} = req.body.payload,
+            actionType = 'update';
+
+        await db.query(
+            sql.updateTest(),
+            {
+                actionType,
+                id,
+                name,
+                description
+            }
+        );
+
+        const [result] = await db.query(
+            sql.returnResponse()
+        );
+
+        res.json({
+            success: true,
+            response: JSON.parse(result[0].response)
+        });
+        
+    } catch (err) {
+        if (err instanceof Error){
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        };
+        res.status(500).json({
+            success: false,
+            message: 'Failed to Update Test',
+        }); 
+    };
+};
+
+export const deletetest = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id,
+            actionType = 'delete';
+        
+        await db.query(
+            sql.deleteTest(),
+            {
+                actionType,
+                id
+            }
+        );
+
+        const [result] = await db.query(
+            sql.returnResponse()
+        );
+
+        res.json({
+            success: true,
+            response: JSON.parse(result[0].response)
+        });
+
+    } catch (err) {
+        if (err instanceof Error){
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        };
+        res.status(500).json({
+            success: false,
+            message: 'Failed to Create Test',
+        }); 
+    };
 };
