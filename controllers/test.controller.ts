@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-const {db} = require('../utils/db.sql.ts'),
+const {db} = require('../utils/db.util.ts'),
     sql = require('../sql/test.sql.ts');
 
 export const createTest = async (req: Request, res: Response) => {
