@@ -13,7 +13,7 @@ A simple API demonstrating CRUD operations with MySQL and Node.js/Express. This 
 
 - **Node.js:** JavaScript runtime
 - **Express:** Web application framework
-- **MySQL:** Database management system
+- **MySQL2:** Database management system
 - **dotenv:** Environment variable management
 - **TypeScript:** Typed JavaScript superset
 
@@ -64,8 +64,11 @@ To set up this API locally, follow these steps:
 - **POST /api/tests** - Create a new test
   ```json
   {
-    "name": "Test name",
-    "description": "Test description"
+      "payload":
+      {
+          "name": "Hello",
+          "description": "description"
+      }
   }
   ```
 
@@ -110,9 +113,12 @@ To set up this API locally, follow these steps:
 
 - **PUT /api/tests/:id** - Update a test by ID
   ``` json
-  {
-      "name": "Edit",
-      "description": "description"
+   {
+      "payload":
+      {
+          "name": "Test Edited",
+          "description": "Edited description"
+      }
   }
   ```
 
@@ -123,6 +129,3 @@ To set up this API locally, follow these steps:
         "message": "Test deleted succesfully"
     }
   ```
-
-## Special Mention:
-This Commit and README is made possible with [GitWrite](https://github.com/jei3m/git-write).
