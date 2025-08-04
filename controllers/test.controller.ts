@@ -27,15 +27,10 @@ export const createTest = async (req: Request, res: Response) => {
     });
 
   } catch (err) {
-    if (err instanceof Error){
-        res.status(500).json({
-            success: false,
-            message: err.message,
-        });
-    };
+    const message = err instanceof Error ? err.message : 'Failed to Create Test';
     res.status(500).json({
         success: false,
-        message: 'Failed to Create Test',
+        message,
     }); 
   };
 };
@@ -50,16 +45,11 @@ export const getTests = async (req: Request, res: Response) => {
             data: rows
         });
     } catch (err) {
-        if (err instanceof Error){
-            res.status(500).json({
-                success: false,
-                message: err.message,
-            }); 
-        };
+        const message = err instanceof Error ? err.message : 'Failed to Get Tests';
         res.status(500).json({
             success: false,
-            message: 'Failed to Get Tests',
-        }); 
+            message,
+        });
     }
 };
 
@@ -89,16 +79,11 @@ export const updateTest = async (req: Request, res: Response) => {
         });
         
     } catch (err) {
-        if (err instanceof Error){
-            res.status(500).json({
-                success: false,
-                message: err.message,
-            });
-        };
+        const message = err instanceof Error ? err.message : 'Failed to Update Test';
         res.status(500).json({
             success: false,
-            message: 'Failed to Update Test',
-        }); 
+            message,
+        });
     };
 };
 
@@ -125,15 +110,10 @@ export const deletetest = async (req: Request, res: Response) => {
         });
 
     } catch (err) {
-        if (err instanceof Error){
-            res.status(500).json({
-                success: false,
-                message: err.message,
-            });
-        };
+        const message = err instanceof Error ? err.message : 'Failed to Delete Test';
         res.status(500).json({
             success: false,
-            message: 'Failed to Create Test',
-        }); 
+            message,
+        });
     };
 };
