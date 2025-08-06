@@ -1,6 +1,8 @@
-# MySQL CRUD API with Node.js
+# MySQL CRUD API with Node.js and Express.js
 
-A simple API demonstrating CRUD operations with MySQL and Node.js/Express. This project was built to learn the fundamentals MySQL and how it can be implemented with Node.js.
+A TypeScript-based API demonstrating CRUD operations with MySQL, Node.js, and Express.
+
+This project uses direct SQL queries for Read operations and stored procedures for Create, Update, and Delete functionalities. It was built to explore the fundamentals of MySQL and its integration with Node.js.
 
 ## Features
 
